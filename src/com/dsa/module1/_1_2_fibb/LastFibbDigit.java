@@ -1,4 +1,4 @@
-package com.dsa.module1.fibb;
+package com.dsa.module1._1_2_fibb;
 
 import java.util.Scanner;
 
