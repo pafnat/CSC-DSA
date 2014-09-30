@@ -1,6 +1,6 @@
 package com.dsa.module1._1_4_sort_search;
 
-import java.util.Arrays;
+
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -16,6 +16,8 @@ import java.util.Scanner;
  *
  * Sample Output:
  * 3 1 -1 1 -1
+ *
+ * Бинарный поиск в массиве
  *
  */
 public class BinarySearchCount {
@@ -33,23 +35,23 @@ public class BinarySearchCount {
         // Read First input line
         do {
             try {
-                    System.out.print(" Enter the first sequence: ");
-                    s1 = in.nextLine();
+                //System.out.print(" Enter the first sequence: ");
+                s1 = in.nextLine();
             } catch (NoSuchElementException e) { /* NOP */ }
         } while (!checkInput(s1));
 
         // Read Second input line
         do {
             try {
-                System.out.print(" Enter the second sequence: ");
+                //System.out.print(" Enter the second sequence: ");
                 s2 = in.nextLine();
             } catch (NoSuchElementException e) { /* NOP */ }
         } while (!checkInput(s2));
 
+/*
         System.out.println("s1 = " + s1);
         System.out.println("s2 = " + s2);
-
-
+*/
 
         rs1 = new int[s1.split(" ").length - 1];
         strToArray(s1, rs1);
@@ -57,18 +59,27 @@ public class BinarySearchCount {
         rs2 = new int[s2.split(" ").length - 1];
         strToArray(s2, rs2);
 
+/*
         System.out.println("rs1 = " + Arrays.toString(rs1));
         System.out.println("rs2 = " + Arrays.toString(rs2));
+*/
 
 
         // BinarySearchCount.
         // Searching the index of rs2 element in rs1 array
 
-        System.out.println("RESULTS");
+/*        System.out.println("RESULTS");*/
         int pos = 0;
         for (int i = 0; i < rs2.length; i++) {
-            pos = Arrays.binarySearch(rs1, rs2[i]);
-            System.out.print(pos + " ");
+            // Instead of using Arrays.binarySearch(rs1, rs2[i]),
+            // we will make own method for binary search
+            //Arrays.binarySearch(rs1, rs2[i]);
+            pos = binarySearch(rs1, rs2[i]);
+            if (pos >= 0) {
+                System.out.print(++pos + " ");
+            } else {
+                System.out.print("-1 ");
+            }
         }
 
 
@@ -109,6 +120,28 @@ public class BinarySearchCount {
         // use arraycopy method to populate source array
         System.arraycopy(tmp, 1, result, 0, tmp.length-1);
 
+    }
+
+    private static int binarySearch(int[] a, int k) {
+
+        int l = 0;
+        int r = a.length-1;
+
+        while (l <= r) {
+            //int m = (l + r) >>> 2;
+            // для того, чтобы избежать переполнение следует делать так
+            // http://googleresearch.blogspot.ru/2006/06/extra-extra-read-all-about-it-nearly.html
+            int m = l + (r - l) / 2;
+            if (a[m]==k) {
+                return m;
+            } else if (a[m]>k) {
+                r = m - 1;
+            } else if (a[m]<k) {
+                l = m + 1;
+            }
+        }
+
+        return -1;
     }
 
 }
