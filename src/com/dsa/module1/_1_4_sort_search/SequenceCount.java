@@ -1,6 +1,6 @@
 package com.dsa.module1._1_4_sort_search;
 
-import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -23,41 +23,70 @@ public class SequenceCount {
         int n = 0;
         String s = "";
 
+        //System.out.print("enter n = ");
         Scanner in = new Scanner(System.in);
         do {
-            System.out.print("enter n = ");
             n = in.nextInt();
         } while ((n<1) || (n>m));
 
-        in = new Scanner(System.in);
-        while (s.split(" ").length != n) {
-            System.out.print("type your sequence = ");
-            s = in.nextLine();
-        }
+        do {
+            try {
+                //System.out.print("type input: ");
+                s = in.nextLine();
+            } catch (NoSuchElementException e) { /* MOP */}
+        } while (!checkInput(s, n) && in.hasNextLine());
 
-        System.out.println("seq = " + s);
-
+        // split the line by space " "
+        String[] items = s.split(" ");
 
         // convert String to int[] array
-        int[] result = new int[s.split(" ").length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = Integer.parseInt(s.split(" ")[i]);
+        int[] result = new int[items.length];
+        for (int i = 0; i < items.length; i++) {
+            try {
+                result[i] = Integer.parseInt(items[i]);
+            } catch (NumberFormatException nfe) {};
         }
 
         countSort(result, m);
 
-        //System.out.println(Arrays.toString(result));
         for (int i=0; i<result.length; i++) {
             System.out.print(result[i] + " ");
         }
 
 
-
-
-
-
     }
 
+    /**
+     * Check the input string
+     * @param s - string to check
+     * @param n - length which should be equals input string length
+     * @return
+     */
+    private static boolean checkInput(String s, int n) {
+
+        boolean flag = false;
+        int cnt = 0;
+
+        // split the line by space " "
+        String[] items = s.split(" ");
+
+        if (items.length != n) {
+            return false;
+        }
+
+        // convert String to int[] array
+        int[] result = new int[items.length];
+        for (int i = 0; i < items.length; i++) {
+            try {
+                result[i] = Integer.parseInt(items[i]);
+                if (result[i]<1 || result[i]>10) {
+                    return false;
+                }
+            } catch (NumberFormatException nfe) {};
+        }
+
+        return true;
+    }
 
     /**
      * Сортировка подсчетом
@@ -75,13 +104,12 @@ public class SequenceCount {
      * 1 1 1 1 1 2 2 2 2 2 2 2 3 3 3
      *
      *
-     * @param a[] - input array
+     * @param a - input array
      * @param m - new array size
      */
     private static void countSort(int[] a, int m) {
 
         int[] b = new int[m];
-
 
         for (int i = 0; i < m; i++) {
             b[i] = 0;
@@ -91,17 +119,13 @@ public class SequenceCount {
             b[a[j]] = b[a[j]] + 1;
         }
 
-        System.out.println("b = " + Arrays.toString(b));
-
         int k = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < b[i]; j++) {
                 a[k] = i;
                 k = k + 1;
             }
-
         }
-
 
 
     }
